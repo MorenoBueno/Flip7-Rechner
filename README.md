@@ -11,11 +11,13 @@ Der Rechner erleichtert die Punkteberechnung und hilft dabei, den Überblick üb
 ## ✨ Funktionen
 
 - Automatische Punkteberechnung
-- Verwaltung mehrerer Spieler
-- Anzeige der Gesamtpunktestände
-- Rundenverlauf und Statistiken
+- Verwaltung mehrerer Spieler, Reihenfolge einstellbar
+- Anzeige der Gesamtpunktestände mit Geber-Marker
+- Rundenverlauf mit nachträglicher Korrektur früherer Runden
+- Statistiken und Spielhistorie mit Siegen pro Spieler
 - Export der Spielauswertung als Bild
 - Lokale Speicherung der Spielstände im Browser
+- Heller und dunkler Modus (folgt der Systemeinstellung)
 - Nutzung auf Smartphone, Tablet und Computer
 
 ## 🚀 Verwendung
@@ -28,6 +30,23 @@ Der Rechner erleichtert die Punkteberechnung und hilft dabei, den Überblick üb
 Eine Installation ist nicht erforderlich.
 
 ## 📋 Versionsverlauf
+
+### v1.2
+- Spielhistorie mit Siegen pro Spieler
+- Heller Modus (folgt der Systemeinstellung)
+- Geber-Marker und Spielerreihenfolge einstellbar
+- «Weiter» springt zum nächsten offenen Spieler
+- «Freeze»-Knopf für Spieler, die ohne Karten 0 Punkte haben
+- Bildschirm bleibt während des Spiels an
+- Ziel während des Spiels änderbar, «Neues Spiel» direkt nach dem Sieg
+- Überarbeitete Startseite
+
+### v1.1
+- Warnung, wenn ein Spieler in der Runde noch keine Karten hat
+- Rückgängig-Hinweis nach dem Speichern einer Runde
+- Laufende Runde wird nach dem Neuladen wiederhergestellt
+- Frühere Runden im Verlauf nachträglich korrigierbar
+- Robusteres Speichern und Teilen der Auswertung als Bild
 
 ### v1.0 – Erste Veröffentlichung
 - Grundfunktionen des Punkterechners
@@ -45,7 +64,7 @@ HTML, CSS und JavaScript
 
 ## 📌 Projektstatus
 
-Version 1.0 – veröffentlicht
+Version 1.2 – veröffentlicht
 
 Weitere Verbesserungen sind geplant.
 
