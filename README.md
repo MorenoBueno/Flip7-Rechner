@@ -48,3 +48,11 @@ HTML, CSS und JavaScript
 Version 1.0 – veröffentlicht
 
 Weitere Verbesserungen sind geplant.
+
+## ⚖️ Hinweis
+
+Dies ist ein inoffizielles Fan-Projekt und steht in keiner Verbindung zum Verlag oder zu den Rechteinhabern von Flip 7. Der Name «Flip 7» gehört seinen jeweiligen Inhabern.
+
+## 📄 Lizenz
+
+MIT, siehe [LICENSE](LICENSE).
