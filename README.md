@@ -19,6 +19,7 @@ Der Rechner erleichtert die Punkteberechnung und hilft dabei, den Überblick üb
 - Lokale Speicherung der Spielstände im Browser
 - Heller und dunkler Modus (folgt der Systemeinstellung)
 - Nutzung auf Smartphone, Tablet und Computer
+- Funktioniert offline und lässt sich auf dem Startbildschirm installieren (PWA)
 
 ## 🚀 Verwendung
 
@@ -30,6 +31,13 @@ Der Rechner erleichtert die Punkteberechnung und hilft dabei, den Überblick üb
 Eine Installation ist nicht erforderlich.
 
 ## 📋 Versionsverlauf
+
+### v1.3
+- Offline-Nutzung und Installation auf dem Startbildschirm (PWA)
+- Zoomen wieder erlaubt, Text auswählbar (Barrierefreiheit)
+- Eigener Speicher-Schlüssel, bestehende Spielstände werden automatisch übernommen
+- Bessere Bedienung mit Tastatur und Screenreader (Esc schliesst Fenster, Beschriftungen)
+- Weiterleitungsseite bei falscher Adresse, zusätzliche Meta-Angaben
 
 ### v1.2
 - Spielhistorie mit Siegen pro Spieler
@@ -60,11 +68,31 @@ Spielstände werden lokal im Browser gespeichert. Es ist kein Benutzerkonto erfo
 
 ## 🛠️ Technologie
 
-HTML, CSS und JavaScript
+HTML, CSS und JavaScript, ohne Build-Schritt. Gehostet über GitHub Pages.
+
+### Aufbau
+
+```
+index.html            Startseite
+404.html              Weiterleitung bei falscher Adresse
+sw.js                 Service Worker (Offline-Cache)
+manifest.webmanifest  App-Installation
+css/style.css         Gestaltung
+js/app.js             Programmlogik
+img/                  Icons und Vorschaubild
+```
+
+### Lokal testen
+
+```
+python3 -m http.server 8000
+```
+
+Danach `http://localhost:8000` im Browser öffnen. Wird eine Datei geändert, in `sw.js` die `VERSION` erhöhen, damit Geräte die neue Version laden.
 
 ## 📌 Projektstatus
 
-Version 1.2 – veröffentlicht
+Version 1.3 – veröffentlicht
 
 Weitere Verbesserungen sind geplant.
 
