@@ -1,6 +1,6 @@
 // Service Worker für Flip 7 Rechner (Offline-Nutzung).
 // Bei jeder Änderung an den Dateien die Versionsnummer erhöhen, damit Geräte das Update holen.
-const VERSION = 'v1.3';
+const VERSION = 'v1.4';
 const CACHE = 'flip7-rechner-' + VERSION;
 const FILES = [
   './',

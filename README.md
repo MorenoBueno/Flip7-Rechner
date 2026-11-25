@@ -32,6 +32,9 @@ Eine Installation ist nicht erforderlich.
 
 ## 📋 Versionsverlauf
 
+### v1.4
+- «Freeze» funktioniert auch mit bereits gespielten Karten: Die Punkte bleiben, der Spieler ist in der Runde fertig
+
 ### v1.3
 - Offline-Nutzung und Installation auf dem Startbildschirm (PWA)
 - Zoomen wieder erlaubt, Text auswählbar (Barrierefreiheit)
@@ -92,7 +95,7 @@ Danach `http://localhost:8000` im Browser öffnen. Wird eine Datei geändert, in
 
 ## 📌 Projektstatus
 
-Version 1.3 – veröffentlicht
+Version 1.4 – veröffentlicht
 
 Weitere Verbesserungen sind geplant.
 

@@ -16,7 +16,7 @@ function cleanEntry(d){
   if(!d||typeof d!=='object') return blank();
   const nums=[...new Set((Array.isArray(d.nums)?d.nums:[]).map(Number).filter(okNum))].slice(0,7);
   const mods=[...new Set((Array.isArray(d.mods)?d.mods:[]).map(Number).filter(m=>MODS.includes(m)))];
-  return {nums,mods,x2:!!d.x2,out:!!d.out,z:!!d.z&&!d.out&&!nums.length&&!mods.length&&!d.x2};
+  return {nums,mods,x2:!!d.x2,out:!!d.out,z:!!d.z&&!d.out};
 }
 // Gespeicherten Stand pruefen: kaputte oder alte Daten fuehren nie zu einer leeren Seite
 function loadState(){
@@ -167,7 +167,7 @@ function render(){
   const dlr=dealer();
   $('strip').innerHTML=S.players.map((p,i)=>{
     const d=S.draft[i], r=score(d);
-    const tag=touched(d)?(d.out?'OUT':d.z?'❄ 0':'+'+r.pts):'offen';
+    const tag=touched(d)?(d.out?'OUT':d.z?'❄ '+r.pts:'+'+r.pts):'offen';
     return `<div class="sp ${i===S.cur?'cur':''} ${t[i]===max&&max>0?'lead':''}" data-p="${i}">
       <div class="n">${esc(p)}</div>${i===dlr?'<span class="gb">G</span>':''}<div class="v">${t[i]}</div><div class="r ${d.out?'out':''} ${touched(d)?'':'open'}">${tag}</div></div>`;
   }).join('');
@@ -192,7 +192,7 @@ function renderEntry(){
   const hasCards=!!(e.nums.length||e.mods.length||e.x2);
   $('fzBtn').classList.toggle('on',!!e.z);
   $('fzBtn').textContent=e.z?'❄ FREEZE ✓':'❄ FREEZE';
-  $('fzBtn').disabled=hasCards||e.out;
+  $('fzBtn').disabled=e.out;
   $('outBtn').disabled=!!e.z;
   $('cnt').textContent=`${e.nums.length} / 7`;
 
@@ -208,11 +208,11 @@ function renderEntry(){
   $('pts').textContent=r.pts;
   $('ptsBox').classList.toggle('isout',e.out);
   if(e.out) $('det').textContent='Out';
-  else if(e.z) $('det').textContent='Freeze ohne Karten · 0 Punkte';
+  else if(e.z&&!hasCards) $('det').textContent='Freeze ohne Karten · 0 Punkte';
   else if(!touched(e)) $('det').textContent='Karten antippen';
   else{
     let d=`${r.sum}${e.x2?' ×2':''}${r.m?' +'+r.m:''}`;
-    $('det').innerHTML=esc(d)+(r.f7?' <span class="f7">+15</span>':'');
+    $('det').innerHTML=(e.z?'❄ ':'')+esc(d)+(r.f7?' <span class="f7">+15</span>':'');
   }
 
   const last=nextOpen()<0;
@@ -226,7 +226,7 @@ function updateStripOnly(){ // cheap refresh without re-scrolling
   S.players.forEach((_,i)=>{
     const el=$('strip').children[i]; if(!el) return;
     const d=S.draft[i], r=score(d), rr=el.querySelector('.r');
-    rr.textContent=touched(d)?(d.out?'OUT':d.z?'❄ 0':'+'+r.pts):'offen'; rr.classList.toggle('out',d.out); rr.classList.toggle('open',!touched(d));
+    rr.textContent=touched(d)?(d.out?'OUT':d.z?'❄ '+r.pts:'+'+r.pts):'offen'; rr.classList.toggle('out',d.out); rr.classList.toggle('open',!touched(d));
   });
 }
 function changed(){$('toast').classList.add('hide');save();renderEntry();updateStripOnly()}
@@ -234,15 +234,15 @@ function changed(){$('toast').classList.add('hide');save();renderEntry();updateS
 $('nums').addEventListener('click',ev=>{
   const b=ev.target.closest('[data-n]'); if(!b||b.disabled) return;
   const a=ent().nums, n=+b.dataset.n, i=a.indexOf(n);
-  i>=0?a.splice(i,1):a.push(n); ent().z=false; vib(); changed();
+  i>=0?a.splice(i,1):a.push(n); vib(); changed();
 });
 $('mods').addEventListener('click',ev=>{
   const b=ev.target.closest('button'); if(!b) return; const d=ent();
-  d.z=false; if(b.dataset.x2) d.x2=!d.x2; else {const m=+b.dataset.m,i=d.mods.indexOf(m); i>=0?d.mods.splice(i,1):d.mods.push(m)}
+  if(b.dataset.x2) d.x2=!d.x2; else {const m=+b.dataset.m,i=d.mods.indexOf(m); i>=0?d.mods.splice(i,1):d.mods.push(m)}
   vib(); changed();
 });
 $('outBtn').addEventListener('click',()=>{const d=ent(); d.out=!d.out; vib(); changed()});
-$('fzBtn').addEventListener('click',()=>{const d=ent(); if(d.out||d.nums.length||d.mods.length||d.x2) return; d.z=!d.z; vib(); changed()});
+$('fzBtn').addEventListener('click',()=>{const d=ent(); if(d.out) return; d.z=!d.z; vib(); changed()});
 $('clearBtn').addEventListener('click',()=>{if(editing) editing.e=blank(); else S.draft[S.cur]=blank(); changed()});
 
 function goto(i){if(editing) return; S.cur=i;save();render();window.scrollTo({top:0,behavior:'smooth'})}
@@ -328,7 +328,7 @@ function renderHist(){
   let h='<tr><th>#</th>'+S.players.map(p=>`<th>${esc(p)}</th>`).join('')+'</tr>';
   S.rounds.forEach((r,ri)=>{
     h+=`<tr><td>${ri+1}</td>`+S.players.map((_,i)=>{const c=r[i]||{pts:0};
-      return `<td data-r="${ri}" data-p="${i}" class="${c.out?'b':c.f7?'f7':''}">${c.out?'Out':c.pts}</td>`}).join('')+'</tr>';
+      return `<td data-r="${ri}" data-p="${i}" class="${c.out?'b':c.f7?'f7':''}">${c.out?'Out':c.pts}${c.d&&c.d.z?' ❄':''}</td>`}).join('')+'</tr>';
   });
   h+='<tr><td><b>Total</b></td>'+t.map(v=>`<td><b>${v}</b></td>`).join('')+'</tr>';
   $('hist').innerHTML=h;
